@@ -27,7 +27,7 @@ contract Phown {
         items[msg.sender][imei] = Data({imei: imei, marked: false, ownershipCount: 0});
         reverseItems[imei] = msg.sender;
         
-        emit Register(msg.sender, imei);
+        Register(msg.sender, imei);
     }
     
     function transfer(uint imei, address addr) public {
@@ -39,21 +39,21 @@ contract Phown {
         items[msg.sender][imei] = Data({imei: 0, marked: false, ownershipCount: 0});
         reverseItems[imei] = addr;
         
-        emit Transfer(imei);
+        Transfer(imei);
     }
 
     function mark(uint imei) public {
         require(items[msg.sender][imei].imei == imei);
         require(items[msg.sender][imei].marked == false);
         items[msg.sender][imei].marked = true;
-        emit Mark(imei);
+        Mark(imei);
     }
 
     function unmark(uint imei) public {
         require(items[msg.sender][imei].imei == imei);
         require(items[msg.sender][imei].marked == true);
         items[msg.sender][imei].marked = false;
-        emit Unmark(imei);
+        Unmark(imei);
     }
 
 }
