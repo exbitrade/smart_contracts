@@ -13,7 +13,7 @@ contract PhownDelegated {
         uint ownershipCount;
     }
 
-    mapping (address => mapping (uint => Data)) public items;
+    mapping (address => mapping (uint => Data)) items;
     mapping (uint => address) reverseItems;
     
     address creator;
@@ -31,7 +31,7 @@ contract PhownDelegated {
         require(items[addr][imei].imei == 0);
         require(reverseItems[imei] == 0);
         
-        items[addr][imei] = Data({imei: imei, marked: false, ownershipCount: 0});
+        items[addr][imei] = Data({imei: imei, marked: false, ownershipCount: 1});
         reverseItems[imei] = msg.sender;
         
         emit Register(addr, imei);
@@ -63,11 +63,27 @@ contract PhownDelegated {
         emit Unmark(imei);
     }
     
+    function isMarked(uint imei) public constant onlyCreator returns (bool) {
+        if (reverseItems[imei] == 0) {
+            return false;
+        }
+        else {
+            return items[reverseItems[imei]][imei].marked;
+        }
+    }
+    
+    function ownershipCount(uint imei) public constant onlyCreator returns (uint) {
+        if (reverseItems[imei] == 0) {
+            return 0;
+        }
+        else {
+            return items[reverseItems[imei]][imei].ownershipCount;
+        }
+    }
+    
     modifier onlyCreator() {
         require(msg.sender == creator);
         _;
     }
 
 }
-
-
